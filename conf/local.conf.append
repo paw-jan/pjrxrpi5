@@ -1,21 +1,49 @@
-# Append custom Raspberry Pi 5 Yocto settings
+# ------------------------------------------------------------
+# Raspberry Pi 5 Yocto custom configuration (kirkstone)
+# ------------------------------------------------------------
 
-# Set target machine
+# Target machine
 MACHINE = "raspberrypi5"
 
-# Enable GPU & GL support
-DISTRO_FEATURES:append = " opengl"
-PACKAGECONFIG:append:pn-weston = " cms-colord"
+# Parallel build performance
+BB_NUMBER_THREADS ?= "8"
+PARALLEL_MAKE ?= "-j8"
 
-# Enable systemd (Raspberry Pi BSP defaults to sysvinit without this)
+# Default image type
+IMAGE_FSTYPES += " wic.bz2"
+
+# Yocto cache directories (outside build/)
+DL_DIR ?= "${TOPDIR}/../downloads"
+SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
+
+# ------------------------------------------------------------
+# Systemd instead of sysvinit (RPi BSP defaults to sysvinit)
+# ------------------------------------------------------------
 DISTRO_FEATURES:append = " systemd"
 VIRTUAL-RUNTIME_init_manager = "systemd"
 VIRTUAL-RUNTIME_initscripts = ""
 
-# Increase parallel build speed (optional, improves CI builds)
-BB_NUMBER_THREADS ?= "8"
-PARALLEL_MAKE ?= "-j8"
+# ------------------------------------------------------------
+# Networking / SSH
+# ------------------------------------------------------------
 
-# Set default image
-IMAGE_FSTYPES += "tar.xz"
+# Enable SSH server (Dropbear)
+IMAGE_FEATURES += " ssh-server-dropbear"
 
+# NetworkManager instead of ifupdown
+DISTRO_FEATURES:append = " wifi bluetooth"
+NETWORK_MANAGER = "networkmanager"
+
+# Packages required for networking + UART login
+IMAGE_INSTALL:append = " \
+    networkmanager \
+    systemd-serialgetty \
+"
+
+# ------------------------------------------------------------
+# 
+# ------------------------------------------------------------
+
+# Enable GPU & GL support
+#DISTRO_FEATURES:append = " opengl"
+#PACKAGECONFIG:append:pn-weston = " cms-colord"
