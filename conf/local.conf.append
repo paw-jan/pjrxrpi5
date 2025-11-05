@@ -1,0 +1,21 @@
+# Append custom Raspberry Pi 5 Yocto settings
+
+# Set target machine
+MACHINE = "raspberrypi5"
+
+# Enable GPU & GL support
+DISTRO_FEATURES:append = " opengl"
+PACKAGECONFIG:append:pn-weston = " cms-colord"
+
+# Enable systemd (Raspberry Pi BSP defaults to sysvinit without this)
+DISTRO_FEATURES:append = " systemd"
+VIRTUAL-RUNTIME_init_manager = "systemd"
+VIRTUAL-RUNTIME_initscripts = ""
+
+# Increase parallel build speed (optional, improves CI builds)
+BB_NUMBER_THREADS ?= "8"
+PARALLEL_MAKE ?= "-j8"
+
+# Set default image
+IMAGE_FSTYPES += "tar.xz"
+
