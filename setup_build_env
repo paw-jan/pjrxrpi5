@@ -6,7 +6,13 @@ if ! grep -q "meta-pjrxrpi5" conf/bblayers.conf; then
     cat <<'EOF' >> conf/bblayers.conf
 
 #####  ADD meta-pjrxrpi5
-BBLAYERS += " ${TOPDIR}/../meta-pjrxrpi5 "
+BBLAYERS += " \
+  ${TOPDIR}/../meta-raspberrypi \
+  ${TOPDIR}/../meta-openembedded/meta-oe \
+  ${TOPDIR}/../meta-openembedded/meta-networking \
+  ${TOPDIR}/../meta-openembedded/meta-python \
+  ${TOPDIR}/../meta-pjrxrpi5 \
+"
 
 EOF
 fi
