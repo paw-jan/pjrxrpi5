@@ -34,8 +34,5 @@ PARALLEL_MAKE ?= "-j8"
 DL_DIR ?= "${TOPDIR}/../downloads"
 SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
 
-
-IMAGE_INSTALL:append = " pjrxrpi5"
-
 EOF
 fi
