@@ -11,28 +11,12 @@ BBLAYERS += " ${TOPDIR}/../meta-pjrxrpi5 "
 EOF
 fi
 
-# ADD pjrxrpi5 configuration
-if ! grep -q -E "require.*pjrxrpi5.conf" conf/bblayers.conf; then
-    cat <<'EOF' >> conf/bblayers.conf
-
-#####  ADD custom configuration
-require ${TOPDIR}/../meta-pjrxrpi5/conf/pjrxrpi5.conf
-
-EOF
-fi
-
 ###########################################################  update:  conf/local.conf
 if ! grep -q "#####  pjrxrpi5" conf/local.conf; then
     cat <<'EOF' >> conf/local.conf
 
 #####  pjrxrpi5
-MACHINE = "raspberrypi5"
-
-BB_NUMBER_THREADS ?= "8"
-PARALLEL_MAKE ?= "-j8"
-
-DL_DIR ?= "${TOPDIR}/../downloads"
-SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
+require ${TOPDIR}/../conf/pjrxrpi5-local.conf
 
 EOF
 fi
